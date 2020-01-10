@@ -1,6 +1,6 @@
 Name: mysql
 Version: 5.1.73
-Release: 5%{?dist}.1
+Release: 7%{?dist}
 Summary: MySQL client programs and shared libraries
 Group: Applications/Databases
 URL: http://www.mysql.com
@@ -59,7 +59,8 @@ Patch20: mysql-rhbz1059545.patch
 Patch21: mysql-dh1024.patch
 Patch22: mysql-openssl-test.patch
 Patch23: mysql-test-events_1.patch
-Patch24: mysql-relay-logging.patch
+Patch24: mysql-tls.patch
+Patch25: mysql-relay-logging.patch
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires: perl, readline-devel, openssl-devel
@@ -207,6 +208,7 @@ the MySQL sources.
 %patch22 -p1
 %patch23 -p1
 %patch24 -p1
+%patch25 -p1
 
 # workaround for upstream bug #56342
 rm -f mysql-test/t/ssl_8k_key-master.opt
@@ -610,10 +612,14 @@ fi
 %{_mandir}/man1/mysql_client_test.1*
 
 %changelog
-* Wed Nov 18 2015 Jakub Dorňák <jdornak@redhat.com> - 5.1.73-5.1
+* Thu Feb 25 2016 Jakub Dorňák <jdornak@redhat.com> - 5.1.73-7
 - Fixed reload_acl_and_cache
+  Resolves: #1281370
+
+* Wed Feb 24 2016 Jakub Dorňák <jdornak@redhat.com> - 5.1.73-6
+- Add support for TLSv1.1 and TLSv1.2
 - Fixed test events_1 (end date in past)
-  Resolves: #1312274
+  Resolves: #1287048
 
 * Mon Jun 15 2015 Jakub Dorňák <jdornak@redhat.com> - 5.1.73-5
 - Use rather DH 1024 as tmp cipher
