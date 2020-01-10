@@ -1,6 +1,6 @@
 Name: mysql
 Version: 5.1.73
-Release: 3%{?dist}
+Release: 5%{?dist}
 Summary: MySQL client programs and shared libraries
 Group: Applications/Databases
 URL: http://www.mysql.com
@@ -56,6 +56,8 @@ Patch17: mysql-cve-2012-5611.patch
 Patch18: mysql-dump-log-tables.patch
 Patch19: mysql-logrotate.patch
 Patch20: mysql-rhbz1059545.patch
+Patch21: mysql-dh1024.patch
+Patch22: mysql-openssl-test.patch
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires: perl, readline-devel, openssl-devel
@@ -199,6 +201,8 @@ the MySQL sources.
 %patch18 -p1
 %patch19 -p1
 %patch20 -p1
+%patch21 -p1
+%patch22 -p1
 
 # workaround for upstream bug #56342
 rm -f mysql-test/t/ssl_8k_key-master.opt
@@ -602,21 +606,31 @@ fi
 %{_mandir}/man1/mysql_client_test.1*
 
 %changelog
+* Mon Jun 15 2015 Jakub Dorňák <jdornak@redhat.com> - 5.1.73-5
+- Use rather DH 1024 as tmp cipher
+  Related: #1228755
+
+* Fri Jun 12 2015 Honza Horak <hhorak@redhat.com> - 5.1.73-4
+- Use DH 2048 as tmp cipher
+  Resolves: #1228755
+- Renew certificates for tests
+  Related: #1228755
+
 * Mon Feb  3 2014 Honza Horak <hhorak@redhat.com> 5.1.73-3
 - Fixes for CVE-2014-0001
-  Resolves: #1055880
+  Resolves: #1055882
 
 * Tue Jan 28 2014 Honza Horak <hhorak@redhat.com> 5.1.73-2
 - Make mysqld init script more robust and ignore existing but
   non-being-used unix socket file
-  Resolves: #1058719
+  Resolves: #1037650
 
 * Wed Jan 22 2014 Jakub Dorňák <jdornak@redhat.com> - 5.1.73-1
 - Update to MySQL 5.1.73, for various fixes described at
   http://dev.mysql.com/doc/relnotes/mysql/5.1/en/news-5-1-73.html
   (CVE-2014-0412, CVE-2014-0437, CVE-2013-5908, CVE-2014-0393,
   CVE-2014-0386, CVE-2014-0401, CVE-2014-0402)
-  Resolves: #1055880
+  Resolves: #1055882
 
 * Fri Aug  9 2013 Honza Horak <hhorak@redhat.com> 5.1.71-1
 - Update to MySQL 5.1.71, for various fixes described at
