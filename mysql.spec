@@ -1,6 +1,6 @@
 Name: mysql
 Version: 5.1.73
-Release: 7%{?dist}
+Release: 8%{?dist}
 Summary: MySQL client programs and shared libraries
 Group: Applications/Databases
 URL: http://www.mysql.com
@@ -38,6 +38,7 @@ Source7: README.mysql-license
 Source9: mysql-embedded-check.c
 # Working around perl dependency checking bug in rpm FTTB. Remove later.
 Source999: filter-requires-mysql.sh
+Source1000:	mysql.ini
 
 Patch1: mysql-ssl-multilib.patch
 Patch2: mysql-errno.patch
@@ -61,6 +62,10 @@ Patch22: mysql-openssl-test.patch
 Patch23: mysql-test-events_1.patch
 Patch24: mysql-tls.patch
 Patch25: mysql-relay-logging.patch
+Patch26: mysql-cve-2016-6663.patch
+Patch27: mysql-cve-2016-6662-b-1ebbc61e.patch
+Patch28: mysql-cve-2016-6662-c-2135853b.patch
+Patch29:	mysql_events_2.result.patch
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires: perl, readline-devel, openssl-devel
@@ -209,6 +214,10 @@ the MySQL sources.
 %patch23 -p1
 %patch24 -p1
 %patch25 -p1
+%patch26 -p1
+%patch27 -p1
+%patch28 -p1
+%patch29 -p1
 
 # workaround for upstream bug #56342
 rm -f mysql-test/t/ssl_8k_key-master.opt
@@ -612,6 +621,16 @@ fi
 %{_mandir}/man1/mysql_client_test.1*
 
 %changelog
+* Tue Jan 24 2017 Scientific Linux Auto Patch Process <SCIENTIFIC-LINUX-DEVEL@LISTSERV.FNAL.GOV>
+- Added Patch: mysql_events_2.result.patch
+-->  Scientific Linux is an Enterprise Linux, modify the script to know this
+- Added Source: mysql.ini
+-->  Config file for automated patch script
+
+* Sun Dec 11 2016 Honza Horak <hhorak@redhat.com> - 5.1.73-8
+- Fix CVE-2016-6662 and CVE-2016-6663
+  Resolves: #1397309
+
 * Thu Feb 25 2016 Jakub Dorňák <jdornak@redhat.com> - 5.1.73-7
 - Fixed reload_acl_and_cache
   Resolves: #1281370
